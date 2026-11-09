@@ -7,6 +7,9 @@
     "ms-vscode.cpptools",
     "humao.rest-client",
     "eamodio.gitlens",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "ritwickdey.LiveServer",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag"
   ]
 }

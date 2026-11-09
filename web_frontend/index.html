@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shenchuchu | 后端开发者成果展示与成长空间</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(22, 30, 49, 0.75);
+      --border: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --accent: #10b981;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --code-bg: #030712;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: radial-gradient(circle at 10% 20%, #172554 0%, #0b0f19 90%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    header {
+      backdrop-filter: blur(12px);
+      background: rgba(11, 15, 25, 0.7);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #60a5fa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 2rem;
+    }
+
+    .tags {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tag {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 0.3rem 0.8rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(96, 165, 250, 0.4);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .code-box {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .interactive-section {
+      margin-top: 3.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .chat-input-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #2563eb;
+    }
+
+    .chat-response {
+      margin-top: 1rem;
+      background: rgba(3, 7, 18, 0.6);
+      border-radius: 8px;
+      padding: 1rem;
+      min-height: 80px;
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      white-space: pre-wrap;
+      border: 1px solid var(--border);
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand">Shenchuchu | 编程之路</a>
+    <div class="nav-links">
+      <a href="#projects">项目成果</a>
+      <a href="#ai-demo">AI 实时交互</a>
+      <a href="https://github.com/shenchuchu91-hub/backend-learning" target="_blank">GitHub 仓库 ↗</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <div class="tags">
+        <span class="tag">🐧 Linux</span>
+        <span class="tag">⚡ C 语言 Socket</span>
+        <span class="tag">🐍 Python 后端</span>
+        <span class="tag">🧠 DeepSeek AI 接入</span>
+        <span class="tag">🐙 Git & GitHub</span>
+      </div>
+      <h1>从底层到架构，我的 <span>后端开发者</span> 征程</h1>
+      <p>记录学习历程、网络通信原理探究与 AI 驱动的全栈服务构建。</p>
+    </section>
+
+    <section id="projects">
+      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">📦 成果与核心模块</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="card-title">⚡ C 语言底层 Socket 服务器</div>
+          <p class="card-desc">基于 Linux POSIX 系统调用，实现 TCP 建立连接、三次握手监听与标准 HTTP 报文响应，直击后端通信本质。</p>
+          <div class="code-box">cd c_backend && make run</div>
+          <span style="font-size: 0.85rem; color: #34d399;">● 监听端口: 8080 (已通过编译验证)</span>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🐍 Python 业务 API 与 AI 桥接</div>
+          <p class="card-desc">构建原生 RESTful 接口，并安全读取本地环境变量，无缝对接 DeepSeek 大模型问答流水线。</p>
+          <div class="code-box">python3 python_backend/app.py</div>
+          <span style="font-size: 0.85rem; color: #60a5fa;">● 监听端口: 8000 (支持 CORS 跨域通信)</span>
+        </div>
+
+        <div class="card">
+          <div class="card-title">🛠️ VS Code 现代化工程套件</div>
+          <p class="card-desc">配置了 Continue 智能助手（集成 DeepSeek-V3 与 R1）、Ruff 极速格式化、REST Client 及 Live Server 预览。</p>
+          <div class="code-box">已全部自动化配置就绪</div>
+          <span style="font-size: 0.85rem; color: #a78bfa;">● 随时在编辑器内一键调试</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai-demo" class="interactive-section">
+      <h2 style="font-size: 1.5rem; font-weight: 700;">🤖 网页直连本地 DeepSeek 后端测试</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.3rem;">
+        在后台运行 <code>python3 python_backend/app.py</code> 后，即可在此输入问题向你的后端服务发送请求：
+      </p>
+
+      <div class="chat-input-group">
+        <input type="text" id="prompt-input" placeholder="输入问题（如：如何学好 Linux 网络编程？）" value="向未来的自己说一句后端工程师的座右铭吧！">
+        <button id="send-btn" onclick="sendToBackend()">发送给 DeepSeek</button>
+      </div>
+
+      <div class="chat-response" id="chat-output">等待发送请求...（点击上方按钮即可测试与本地 Python 后端的连通性）</div>
+    </section>
+  </div>
+
+  <footer>
+    <p>构建者: <strong>Shenchuchu</strong> · 源码已同步托管于 GitHub</p>
+    <p style="margin-top: 0.5rem; font-size: 0.85rem;">Powered by Linux, Python, C & DeepSeek API</p>
+  </footer>
+
+  <script>
+    async function sendToBackend() {
+      const input = document.getElementById('prompt-input');
+      const output = document.getElementById('chat-output');
+      const btn = document.getElementById('send-btn');
+      const prompt = input.value.trim();
+
+      if (!prompt) return;
+
+      btn.disabled = true;
+      btn.innerText = "请求中...";
+      output.innerText = "⏳ 正在通过本地 Python 后端向 DeepSeek 转发请求，请稍候...";
+
+      try {
+        const resp = await fetch('http://127.0.0.1:8000/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt: prompt })
+        });
+
+        if (!resp.ok) {
+          throw new Error('后端返回异常状态: ' + resp.status);
+        }
+
+        const data = await resp.json();
+        output.innerText = data.reply || JSON.stringify(data, null, 2);
+      } catch (err) {
+        output.innerHTML = `⚠️ <strong>连接失败或 Python 后端未启动</strong><br><br>` +
+          `请确保在终端中运行了：<br><code>cd python_backend && python3 app.py</code><br><br>` +
+          `详细提示: ` + err.message;
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "发送给 DeepSeek";
+      }
+    }
+  </script>
+</body>
+</html>

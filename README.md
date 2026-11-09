@@ -1,6 +1,6 @@
-# 后端进阶之路：从 Linux、C 到 Python 与 AI 接入
+# 后端进阶之路：从 Linux、C 到 Python、Web 成果展与 AI 接入
 
-欢迎来到后端开发的实践起步仓库！这里包含了从底层网络套接字（C 语言）到现代应用层 API（Python 原生服务）以及接入 **DeepSeek 大模型** 的完整工作流。
+欢迎来到后端与全栈开发的个人实践仓库！这里包含了从底层网络套接字（C 语言）到现代应用层 API（Python 原生服务）、个人成果展示网页以及接入 **DeepSeek 大模型** 的完整工作流。
 
 ---
 
@@ -10,79 +10,56 @@
 .
 ├── .gitignore              # 严防密钥、二进制缓存泄漏的配置（保护 GitHub 安全）
 ├── .vscode/
-│   ├── extensions.json     # VS Code 推荐插件清单（一键安装 Continue、Python、Ruff、REST Client 等）
-│   └── settings.json       # 编辑器自动保存与代码格式化规范
+│   ├── extensions.json     # VS Code 推荐插件清单（Continue、Live Server、Prettier、Ruff 等）
+│   └── settings.json       # 编辑器自动保存与多语言格式化规范
 ├── deepseek_setup/
-│   └── continue_config_example.json # VS Code Continue 插件接入 DeepSeek 的现成配置模板
+│   └── continue_config_example.json # Continue 插件接入 DeepSeek 的现成配置模板
 ├── c_backend/              # 底层网络核心（C 语言 POSIX Socket）
 │   ├── server.c            # 纯 C 编写的 HTTP 网络服务端
 │   └── Makefile            # 编译脚本（make 一键编译）
-└── python_backend/         # 业务服务核心（Python 原生 HTTP 服务与 DeepSeek 接入）
-    ├── app.py              # 后端 API 服务主程序
-    ├── test_deepseek.py    # 单独测试 DeepSeek API 通信脚本
-    ├── test_requests.http  # VS Code 接口测试用例（免装 Postman）
-    └── .env.example        # 敏感信息模板（复制为 .env 填入你的 Key）
+├── python_backend/         # 业务服务核心（Python 原生 HTTP 服务与 DeepSeek 接入）
+│   ├── app.py              # 后端 API 服务主程序（支持 CORS，供网页前端直接调用）
+│   ├── test_deepseek.py    # 单独测试 DeepSeek API 通信脚本
+│   ├── test_requests.http  # VS Code 接口测试用例（免装 Postman）
+│   └── .env.example        # 敏感信息模板（真实 .env 已被安全忽略）
+└── web_frontend/           # 个人成果展示网站与 AI 交互控制台
+    └── index.html          # 现代化响应式个人网站（支持 Live Server 一键本地预览）
 ```
 
 ---
 
-## 快速上手
+## 快速上手与功能体验
 
-### 1. VS Code 插件一键安装与 DeepSeek 接入
-1. **用 VS Code 打开此项目文件夹**：
-   - 右下角会自动弹出提示：`This workspace has extension recommendations`（此工作区有推荐插件）。
-   - 点击 **`Install All`（全部安装）**，即可自动安装 **Continue (AI助手)**、**Python**、**Ruff**、**REST Client** 等后端套件。
-2. **配置 Continue 接入 DeepSeek**：
-   - 打开 VS Code 左侧的 **Continue** 图标，点击底部的 ⚙️ 设置按钮进入配置。
-   - 参考 `deepseek_setup/continue_config_example.json`，把你的 DeepSeek API Key 填进去即可实现侧边栏 AI 答疑与代码补全。
+### 1. VS Code 智能辅助与 DeepSeek 接入
+- **所有开发插件已全部自动安装**：Continue、Python、C/C++、Ruff、Live Server、Prettier、GitLens。
+- **Continue 插件已注入 DeepSeek Key**：
+  - 打开 VS Code 左侧 Continue 侧边栏，即可直接使用 **DeepSeek-V3** 进行代码补全与对话，或使用 **DeepSeek-R1** 进行复杂逻辑深度推理。
 
----
+### 2. 本地网站实时预览（Live Server）
+- 在 VS Code 资源管理器中，**右键点击 `web_frontend/index.html`**；
+- 选择 **`Open with Live Server`**；
+- 浏览器会自动打开你的个人网站，修改 HTML/CSS 代码时浏览器会自动实时刷新！
 
-### 2. Python 后端与 DeepSeek 对话体验
+### 3. 运行 Python 后端让网页与 DeepSeek 联动
+- 在终端启动后端服务：
+  ```bash
+  python3 python_backend/app.py
+  ```
+- 刷新或打开你的个人网页，在下方的“**AI 实时交互区**”输入任何问题，点击发送，网页就会通过你本地的 Python 后端实时向 DeepSeek 发起提问并展示回答！
 
-1. **配置环境变量**：
-   ```bash
-   cd python_backend
-   cp .env.example .env
-   # 用编辑器打开 .env 填入你的 DeepSeek API Key
-   ```
-2. **启动后端服务**：
-   ```bash
-   python3 app.py
-   ```
-   服务将运行在 `http://127.0.0.1:8000`。
-3. **测试接口**：
-   - 在 VS Code 中打开 `python_backend/test_requests.http` 文件，在请求上方直接点击 **`Send Request`** 即可在编辑器右侧查看返回结果。
+### 4. C 语言底层 Socket 服务器体验
+- 在终端中运行：
+  ```bash
+  cd c_backend && make run
+  ```
+- 访问 `http://127.0.0.1:8080`，通过源码直观理解操作系统内核底层的 Socket、Bind、Listen、Accept 机制。
 
 ---
 
-### 3. C 语言底层 Socket 服务器体验
+## 如何发布网页到 GitHub Pages（免费公网展示）
 
-1. **编译并启动**：
-   ```bash
-   cd c_backend
-   make run
-   ```
-   服务将监听 `http://127.0.0.1:8080`。
-2. **在浏览器或终端测试**：
-   ```bash
-   curl http://127.0.0.1:8080/
-   ```
-   通过阅读 `c_backend/server.c`，你将直观理解操作系统内核是如何通过套接字（Socket）接收网络字节流并返回 HTTP 报文的。
-
----
-
-## 如何将本仓库提交并发布到你的 GitHub
-
-你已经配置好了 GitHub 身份信息，只需在 GitHub 网页上新建一个仓库，然后执行：
-
-```bash
-# 1. 提交本地所有初始代码
-git add .
-git commit -m "feat: 初始化后端学习路线工作区与 DeepSeek 接入模板"
-
-# 2. 关联你的远程仓库并推送 (将下方仓库地址替换为你自己的)
-git remote add origin https://github.com/shenchuchu91-hub/backend-learning-roadmap.git
-git branch -M main
-git push -u origin main
-```
+你可以让全世界任何人通过公网链接访问你的个人主页：
+1. 打开你的 GitHub 仓库：[https://github.com/shenchuchu91-hub/backend-learning](https://github.com/shenchuchu91-hub/backend-learning)
+2. 点击仓库顶部的 **`Settings` -> `Pages`**；
+3. 在 **Branch** 下选择 `main`，文件夹选择 `/ (root)` 或 `/web_frontend`；
+4. 点击 **Save**，稍等 1-2 分钟，GitHub 会生成一个专属链接（例如 `https://shenchuchu91-hub.github.io/backend-learning/web_frontend/`），你就能把它发给任何人看你的项目作品！
