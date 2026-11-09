@@ -187,7 +187,18 @@
       transition: border-color 0.2s;
     }
 
-    input[type="text"]:focus {
+    select {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="text"]:focus, select:focus {
       border-color: var(--primary);
     }
 
@@ -279,14 +290,18 @@
     </section>
 
     <section id="ai-demo" class="interactive-section">
-      <h2 style="font-size: 1.5rem; font-weight: 700;">🤖 网页直连本地 DeepSeek 后端测试</h2>
+      <h2 style="font-size: 1.5rem; font-weight: 700;">🤖 网页直连本地 AI 后端服务</h2>
       <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.3rem;">
-        在后台运行 <code>python3 python_backend/app.py</code> 后，即可在此输入问题向你的后端服务发送请求：
+        在后台运行 <code>python3 python_backend/app.py</code> 后，即可在此切换大模型并发送请求：
       </p>
 
       <div class="chat-input-group">
+        <select id="model-select">
+          <option value="deepseek">DeepSeek-V3</option>
+          <option value="gemini">Gemini 2.5 Flash</option>
+        </select>
         <input type="text" id="prompt-input" placeholder="输入问题（如：如何学好 Linux 网络编程？）" value="向未来的自己说一句后端工程师的座右铭吧！">
-        <button id="send-btn" onclick="sendToBackend()">发送给 DeepSeek</button>
+        <button id="send-btn" onclick="sendToBackend()">发送请求</button>
       </div>
 
       <div class="chat-response" id="chat-output">等待发送请求...（点击上方按钮即可测试与本地 Python 后端的连通性）</div>
@@ -301,15 +316,17 @@
   <script>
     async function sendToBackend() {
       const input = document.getElementById('prompt-input');
+      const modelSelect = document.getElementById('model-select');
       const output = document.getElementById('chat-output');
       const btn = document.getElementById('send-btn');
       const prompt = input.value.trim();
+      const model = modelSelect ? modelSelect.value : 'deepseek';
 
       if (!prompt) return;
 
       btn.disabled = true;
       btn.innerText = "请求中...";
-      output.innerText = "⏳ 正在通过本地 Python 后端向 DeepSeek 转发请求，请稍候...";
+      output.innerText = `⏳ 正在通过本地 Python 后端向 ${model.toUpperCase()} 转发请求，请稍候...`;
 
       try {
         const resp = await fetch('http://127.0.0.1:8000/api/chat', {
@@ -317,7 +334,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ prompt: prompt })
+          body: JSON.stringify({ prompt: prompt, model: model })
         });
 
         if (!resp.ok) {
@@ -332,7 +349,7 @@
           `详细提示: ` + err.message;
       } finally {
         btn.disabled = false;
-        btn.innerText = "发送给 DeepSeek";
+        btn.innerText = "发送请求";
       }
     }
   </script>

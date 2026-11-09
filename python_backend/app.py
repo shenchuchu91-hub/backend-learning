@@ -10,15 +10,22 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import urllib.request
 import urllib.error
 
-# 加载 .env
+# 健壮加载 .env 文件，兼容不同工作目录执行
 def load_env(filepath=".env"):
-    if os.path.exists(filepath):
-        with open(filepath, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, v = line.split("=", 1)
-                    os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+    candidates = [
+        filepath,
+        os.path.join(os.path.dirname(__file__), ".env"),
+        os.path.join(os.path.dirname(__file__), "..", ".env"),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            with open(p, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+            return
 
 load_env()
 PORT = int(os.environ.get("PORT", 8000))
@@ -72,9 +79,36 @@ class BackendHandler(BaseHTTPRequestHandler):
                 self._send_json(400, {"error": "缺少 'prompt' 字段"})
                 return
 
+            chosen_model = body.get("model", "deepseek").lower()
+
+            if "gemini" in chosen_model:
+                api_key = os.environ.get("GEMINI_API_KEY", "")
+                if not api_key:
+                    self._send_json(400, {"error": "未在 .env 中配置 GEMINI_API_KEY"})
+                    return
+
+                try:
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+                    headers = {"Content-Type": "application/json"}
+                    payload = {
+                        "contents": [{"parts": [{"text": prompt}]}]
+                    }
+                    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
+                    with urllib.request.urlopen(req, timeout=30) as resp:
+                        resp_data = json.loads(resp.read().decode("utf-8"))
+                        answer = resp_data["candidates"][0]["content"]["parts"][0]["text"]
+                        self._send_json(200, {
+                            "source": "gemini-2.5-flash",
+                            "prompt": prompt,
+                            "reply": answer
+                        })
+                except Exception as e:
+                    self._send_json(500, {"error": f"调用 Gemini 失败: {str(e)}"})
+                return
+
+            # 默认走 DeepSeek
             api_key = os.environ.get("DEEPSEEK_API_KEY", "")
             if not api_key or "sk-xxxx" in api_key:
-                # 模拟返回，提示配置 Key
                 self._send_json(200, {
                     "source": "mock_response",
                     "tip": "你尚未在 .env 中配置真实的 DEEPSEEK_API_KEY",
