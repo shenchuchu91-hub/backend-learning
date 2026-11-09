@@ -1,0 +1,32 @@
+{
+  "models": [
+    {
+      "title": "DeepSeek-V3 (Chat)",
+      "provider": "openai",
+      "model": "deepseek-chat",
+      "apiKey": "在这里替换为你的DeepSeek_API_KEY",
+      "apiBase": "https://api.deepseek.com"
+    },
+    {
+      "title": "DeepSeek-R1 (深度思考)",
+      "provider": "openai",
+      "model": "deepseek-reasoner",
+      "apiKey": "在这里替换为你的DeepSeek_API_KEY",
+      "apiBase": "https://api.deepseek.com"
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "DeepSeek Coder / Autocomplete",
+    "provider": "openai",
+    "model": "deepseek-chat",
+    "apiKey": "在这里替换为你的DeepSeek_API_KEY",
+    "apiBase": "https://api.deepseek.com"
+  },
+  "customCommands": [
+    {
+      "name": "review",
+      "prompt": "请作为一名经验丰富的资深后端工程师，审查以下代码的性能、安全性和规范性，并给出优化建议：\n\n{{{ input }}}",
+      "description": "后端代码审查"
+    }
+  ]
+}

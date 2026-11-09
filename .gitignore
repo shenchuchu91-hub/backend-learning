@@ -1,0 +1,51 @@
+# 环境变量与敏感配置（严禁提交到 GitHub！）
+.env
+*.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# C / C++ 编译生成文件
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.out
+*.exe
+*.dSYM/
+bin/
+server
+
+# VS Code 本地临时设置
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.log

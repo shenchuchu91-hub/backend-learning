@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "Continue.continue",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-vscode.cpptools",
+    "humao.rest-client",
+    "eamodio.gitlens",
+    "usernamehw.errorlens"
+  ]
+}

@@ -1,0 +1,13 @@
+### 1. 测试根路径状态
+GET http://127.0.0.1:8000/
+
+### 2. 测试健康检查
+GET http://127.0.0.1:8000/health
+
+### 3. 测试调用后端 DeepSeek 对话接口
+POST http://127.0.0.1:8000/api/chat
+Content-Type: application/json
+
+{
+  "prompt": "作为一名后端程序员，日常最核心的三大能力是什么？"
+}
