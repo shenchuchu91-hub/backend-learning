@@ -11,15 +11,22 @@ import urllib.error
 
 def load_env_file(filepath=".env"):
     """简易加载 .env 文件到 os.environ"""
-    if not os.path.exists(filepath):
-        # 也可以查找父级目录
-        parent_path = os.path.join("..", filepath)
-        if os.path.exists(parent_path):
-            filepath = parent_path
-        else:
-            return
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(script_dir, ".env"),
+        filepath,
+        os.path.join("python_backend", ".env"),
+        os.path.join("..", filepath)
+    ]
+    target = None
+    for c in candidates:
+        if os.path.exists(c):
+            target = c
+            break
+    if not target:
+        return
 
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(target, "r", encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith("#") or "=" not in line:
