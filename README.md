@@ -32,8 +32,9 @@
 
 ### 1. VS Code 智能辅助与 DeepSeek 接入
 - **所有开发插件已全部自动安装**：Continue、Python、C/C++、Ruff、Live Server、Prettier、GitLens。
-- **Continue 插件已注入 DeepSeek Key**：
-  - 打开 VS Code 左侧 Continue 侧边栏，即可直接使用 **DeepSeek-V3** 进行代码补全与对话，或使用 **DeepSeek-R1** 进行复杂逻辑深度推理。
+- **需在 `.env` 中配置自己的 Key**：
+  - 将 `python_backend/.env.example` 复制为 `python_backend/.env`，填入你自己申请的 `DEEPSEEK_API_KEY`（如需 Gemini，再填写 `GEMINI_API_KEY`）。不要把真实 Key 提交到仓库。
+  - 若使用 Continue 插件，请按 `deepseek_setup/continue_config_example.json` 自行填写密钥后，即可在侧边栏使用 **DeepSeek-V3** 做代码补全与对话，或使用 **DeepSeek-R1** 进行复杂逻辑深度推理。
 
 ### 2. 本地网站实时预览（Live Server）
 - 在 VS Code 资源管理器中，**右键点击 `web_frontend/index.html`**；
@@ -41,9 +42,23 @@
 - 浏览器会自动打开你的个人网站，修改 HTML/CSS 代码时浏览器会自动实时刷新！
 
 ### 3. 运行 Python 后端让网页与 DeepSeek 联动
+- 先配置密钥与监听参数：
+  ```bash
+  cp python_backend/.env.example python_backend/.env
+  # 在 .env 中填入你自己的 DEEPSEEK_API_KEY
+  ```
+- 默认只监听本机 `127.0.0.1:8000`，CORS 也只允许 `http://127.0.0.1`、`http://localhost`、`http://[::1]`（含任意端口，例如 Live Server 的 `:5500`）。可用环境变量覆盖：
+  ```bash
+  # 监听地址（默认 127.0.0.1；改为 0.0.0.0 会暴露到局域网，不推荐）
+  HOST=127.0.0.1
+  PORT=8000
+  # 额外允许的浏览器来源，逗号分隔（可选）
+  # CORS_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
+  ```
 - 在终端启动后端服务：
   ```bash
   python3 python_backend/app.py
+  # 或临时覆盖监听地址：HOST=127.0.0.1 PORT=8000 python3 python_backend/app.py
   ```
 - 刷新或打开你的个人网页，在下方的“**AI 实时交互区**”输入任何问题，点击发送，网页就会通过你本地的 Python 后端实时向 DeepSeek 发起提问并展示回答！
 
@@ -52,7 +67,7 @@
   ```bash
   cd c_backend && make run
   ```
-- 访问 `http://127.0.0.1:8080`，通过源码直观理解操作系统内核底层的 Socket、Bind、Listen、Accept 机制。
+- 服务绑定在 `127.0.0.1:8080`（仅本机可访问）。在浏览器访问 `http://127.0.0.1:8080`，通过源码直观理解操作系统内核底层的 Socket、Bind、Listen、Accept 机制。
 
 ---
 

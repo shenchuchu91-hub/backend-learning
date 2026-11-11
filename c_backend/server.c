@@ -31,9 +31,13 @@ int main() {
     int opt = 1;
     setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    // 2. 绑定 IP 与 端口
+    // 2. 绑定 IP 与 端口（仅监听 127.0.0.1，避免暴露到局域网或公网）
     server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY; // 监听所有网卡
+    if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr) != 1) {
+        perror("inet_pton 解析 127.0.0.1 失败");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
     server_addr.sin_port = htons(PORT);       // 端口转为网络字节序(大端)
 
     if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {

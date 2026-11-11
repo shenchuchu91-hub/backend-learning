@@ -29,23 +29,63 @@ def load_env(filepath=".env"):
 
 load_env()
 PORT = int(os.environ.get("PORT", 8000))
+# 默认只绑定本机，避免服务被局域网或公网访问。可用环境变量 HOST 覆盖（例如 0.0.0.0）。
+HOST = os.environ.get("HOST", "127.0.0.1")
+
+# 默认只允许本机来源。可用 CORS_ORIGINS 覆盖，多个来源以逗号分隔。
+# 未写端口的条目（如 http://127.0.0.1）会同时匹配任意端口（如 http://127.0.0.1:5500）。
+DEFAULT_CORS_ORIGINS = (
+    "http://127.0.0.1",
+    "http://localhost",
+    "http://[::1]",
+)
+
+
+def _parse_cors_origins():
+    raw = os.environ.get("CORS_ORIGINS", "").strip()
+    if raw:
+        return tuple(item.strip() for item in raw.split(",") if item.strip())
+    return DEFAULT_CORS_ORIGINS
+
+
+CORS_ORIGINS = _parse_cors_origins()
+
+
+def _cors_allow_origin(origin):
+    """若 Origin 被允许则返回应写回的值，否则返回 None。"""
+    if not origin:
+        return None
+    for allowed in CORS_ORIGINS:
+        if origin == allowed or origin.startswith(allowed + ":"):
+            return origin
+    return None
+
 
 class BackendHandler(BaseHTTPRequestHandler):
+    def _apply_cors_headers(self):
+        allowed = _cors_allow_origin(self.headers.get("Origin", ""))
+        if allowed:
+            self.send_header("Access-Control-Allow-Origin", allowed)
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
     def _send_json(self, status_code, data):
         self.send_response(status_code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        self._apply_cors_headers()
         self.end_headers()
         self.wfile.write(json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8"))
 
     def do_OPTIONS(self):
-        self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        self.end_headers()
+        origin = self.headers.get("Origin", "")
+        if _cors_allow_origin(origin):
+            self.send_response(204)
+            self._apply_cors_headers()
+            self.end_headers()
+        else:
+            self.send_response(403)
+            self.end_headers()
 
     def do_GET(self):
         if self.path == "/" or self.path == "":
@@ -145,10 +185,11 @@ class BackendHandler(BaseHTTPRequestHandler):
             self._send_json(404, {"error": "未知 POST 路径"})
 
 def run_server():
-    server_address = ("", PORT)
+    server_address = (HOST, PORT)
     httpd = HTTPServer(server_address, BackendHandler)
     print(f"==================================================")
-    print(f" 🚀 后端服务已启动: http://127.0.0.1:{PORT}")
+    print(f" 🚀 后端服务已启动: http://{HOST}:{PORT}")
+    print(f" 默认仅监听本机。如需更改监听地址，请设置环境变量 HOST。")
     print(f" 按 Ctrl + C 可终止服务")
     print(f"==================================================")
     try:
