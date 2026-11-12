@@ -2,12 +2,16 @@
 
 欢迎来到后端与全栈开发的个人实践仓库！这里包含了从底层网络套接字（C 语言）到现代应用层 API（Python 原生服务）、个人成果展示网页以及接入 **DeepSeek 大模型** 的完整工作流。
 
+学习过程单独记在 [notes/01-从套接字到接口.md](./notes/01-从套接字到接口.md)：先确认套接字上收发的是什么，再用 Python 标准库分成接口，密钥只留在本机 `.env`。
+
 ---
 
 ## 目录结构
 
 ```text
 .
+├── notes/
+│   └── 01-从套接字到接口.md  # 学习记录：套接字、本机接口、密钥不进仓库
 ├── .gitignore              # 严防密钥、二进制缓存泄漏的配置（保护 GitHub 安全）
 ├── .vscode/
 │   ├── extensions.json     # VS Code 推荐插件清单（Continue、Live Server、Prettier、Ruff 等）
