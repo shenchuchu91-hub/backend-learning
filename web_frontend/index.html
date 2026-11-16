@@ -3,353 +3,376 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shenchuchu | 后端开发者成果展示与成长空间</title>
+  <title>shenchuchu</title>
   <style>
     :root {
-      --bg: #0b0f19;
-      --card-bg: rgba(22, 30, 49, 0.75);
-      --border: rgba(255, 255, 255, 0.1);
-      --primary: #3b82f6;
-      --accent: #10b981;
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --code-bg: #030712;
+      --bg: #0a0a0c;
+      --surface: #111113;
+      --border: rgba(255, 255, 255, 0.06);
+      --text: #c8c8cc;
+      --text-dim: #5a5a60;
+      --accent: #4a4a52;
+      --mono: ui-monospace, 'SF Mono', 'Cascadia Code', 'Fira Code', Menlo, Consolas, monospace;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 15px; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: radial-gradient(circle at 10% 20%, #172554 0%, #0b0f19 90%);
+      font-family: var(--mono);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      line-height: 1.6;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* — scanline overlay — */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+      );
+      z-index: 9999;
     }
 
     header {
-      backdrop-filter: blur(12px);
-      background: rgba(11, 15, 25, 0.7);
       border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1rem 2rem;
+      padding: 1.2rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .brand {
-      font-size: 1.25rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #60a5fa, #34d399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--text-dim);
       text-decoration: none;
+      letter-spacing: 0.08em;
     }
 
     .nav-links a {
-      color: var(--text-muted);
+      color: var(--text-dim);
       text-decoration: none;
-      margin-left: 1.5rem;
-      font-size: 0.95rem;
-      transition: color 0.2s;
+      margin-left: 2rem;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
     }
 
-    .nav-links a:hover {
-      color: #fff;
-    }
+    .nav-links a:hover { color: var(--text); }
 
     .container {
-      max-width: 1080px;
+      max-width: 740px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem;
+      padding: 4rem 1.5rem;
     }
 
+    /* — hero — */
     .hero {
-      text-align: center;
-      padding: 3rem 1rem;
+      padding: 3rem 0 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-ascii {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      line-height: 1.4;
+      margin-bottom: 2rem;
+      opacity: 0.5;
     }
 
     .hero h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .hero h1 span {
-      background: linear-gradient(135deg, #38bdf8, #818cf8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      margin-bottom: 0.8rem;
     }
 
     .hero p {
-      font-size: 1.15rem;
-      color: var(--text-muted);
-      max-width: 650px;
-      margin: 0 auto 2rem;
-    }
-
-    .tags {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 2rem;
-    }
-
-    .tag {
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 0.3rem 0.8rem;
-      border-radius: 9999px;
       font-size: 0.85rem;
-      font-weight: 500;
+      color: var(--text-dim);
+      max-width: 500px;
+      line-height: 1.8;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+    .hero .quiet {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-style: italic;
+      letter-spacing: 0.03em;
     }
 
-    .card {
-      background: var(--card-bg);
+    /* — sections — */
+    section {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type { border-bottom: none; }
+
+    h2 {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    /* — project cards — */
+    .project {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s, border-color 0.2s;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 0.8rem;
+      transition: border-color 0.3s;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(96, 165, 250, 0.4);
+    .project:hover {
+      border-color: rgba(255, 255, 255, 0.12);
     }
 
-    .card-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
+    .project-header {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.4rem;
     }
 
-    .card-desc {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-
-    .code-box {
-      background: var(--code-bg);
-      border-radius: 8px;
-      padding: 0.8rem;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    .project-name {
       font-size: 0.85rem;
-      color: #38bdf8;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+
+    .project-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* — code block — */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1rem 1.2rem;
+      font-size: 0.78rem;
+      color: var(--text-dim);
       overflow-x: auto;
+      white-space: pre;
+      line-height: 1.6;
       margin-bottom: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .interactive-section {
-      margin-top: 3.5rem;
-      background: var(--card-bg);
+    /* — ai console — */
+    .console-box {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
+      padding: 1.5rem;
     }
 
-    .chat-input-group {
+    .console-box p {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+
+    .input-row {
       display: flex;
-      gap: 0.75rem;
-      margin-top: 1rem;
+      gap: 0.5rem;
     }
 
-    input[type="text"] {
-      flex: 1;
-      background: var(--code-bg);
+    select, input[type="text"] {
+      background: var(--bg);
       border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      color: var(--text);
+      padding: 0.6rem 0.8rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.3s;
     }
 
-    select {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      color: #fff;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      outline: none;
-      cursor: pointer;
-    }
+    input[type="text"] { flex: 1; }
 
-    input[type="text"]:focus, select:focus {
-      border-color: var(--primary);
+    select:focus, input[type="text"]:focus {
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.6rem 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.3s;
+      letter-spacing: 0.05em;
     }
 
     button:hover {
-      background: #2563eb;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text);
     }
 
-    .chat-response {
-      margin-top: 1rem;
-      background: rgba(3, 7, 18, 0.6);
-      border-radius: 8px;
-      padding: 1rem;
-      min-height: 80px;
-      font-size: 0.95rem;
-      color: #e5e7eb;
-      white-space: pre-wrap;
+    .output {
+      margin-top: 0.8rem;
+      background: var(--bg);
       border: 1px solid var(--border);
+      padding: 1rem;
+      min-height: 60px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      white-space: pre-wrap;
+      line-height: 1.7;
     }
 
+    /* — footer — */
     footer {
       text-align: center;
       padding: 3rem 1rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    /* — responsive — */
+    @media (max-width: 600px) {
+      header { padding: 1rem; }
+      .container { padding: 2rem 1rem; }
+      .input-row { flex-direction: column; }
+      .nav-links a { margin-left: 1rem; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="#" class="brand">Shenchuchu | 编程之路</a>
+    <a href="#" class="brand">shenchuchu</a>
     <div class="nav-links">
-      <a href="#projects">项目成果</a>
-      <a href="#ai-demo">AI 实时交互</a>
-      <a href="https://github.com/shenchuchu91-hub/backend-learning" target="_blank">GitHub 仓库 ↗</a>
+      <a href="#work">work</a>
+      <a href="#console">console</a>
+      <a href="https://github.com/shenchuchu91-hub/backend-learning" target="_blank">source</a>
     </div>
   </header>
 
   <div class="container">
+
     <section class="hero">
-      <div class="tags">
-        <span class="tag">🐧 Linux</span>
-        <span class="tag">⚡ C 语言 Socket</span>
-        <span class="tag">🐍 Python 后端</span>
-        <span class="tag">🧠 DeepSeek AI 接入</span>
-        <span class="tag">🐙 Git & GitHub</span>
-      </div>
-      <h1>从底层到架构，我的 <span>后端开发者</span> 征程</h1>
-      <p>记录学习历程、网络通信原理探究与 AI 驱动的全栈服务构建。</p>
+      <pre class="hero-ascii">    ╭──────────────────────────────╮
+    │  system idle                 │
+    │  initializing routines . . . │
+    ╰──────────────────────────────╯</pre>
+      <h1>shenchuchu</h1>
+      <p>linux internals, posix socket, raw http,
+         minimalist python api, local ai gateway.</p>
+      <span class="quiet">"no matter where you go, everyone's connected."</span>
     </section>
 
-    <section id="projects">
-      <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">📦 成果与核心模块</h2>
-      <div class="grid">
-        <div class="card">
-          <div class="card-title">⚡ C 语言底层 Socket 服务器</div>
-          <p class="card-desc">基于 Linux POSIX 系统调用，实现 TCP 建立连接、三次握手监听与标准 HTTP 报文响应，直击后端通信本质。</p>
-          <div class="code-box">cd c_backend && make run</div>
-          <span style="font-size: 0.85rem; color: #34d399;">● 监听端口: 8080 (已通过编译验证)</span>
-        </div>
+    <section id="work">
+      <h2>modules</h2>
 
-        <div class="card">
-          <div class="card-title">🐍 Python 业务 API 与 AI 桥接</div>
-          <p class="card-desc">构建原生 RESTful 接口，并安全读取本地环境变量，无缝对接 DeepSeek 大模型问答流水线。</p>
-          <div class="code-box">python3 python_backend/app.py</div>
-          <span style="font-size: 0.85rem; color: #60a5fa;">● 监听端口: 8000 (支持 CORS 跨域通信)</span>
+      <div class="project">
+        <div class="project-header">
+          <span class="project-name">c_backend/server.c</span>
+          <span class="project-tag">posix · tcp · raw http</span>
         </div>
+        <p class="project-desc">bare-metal socket server.
+bind → listen → accept → hand-write http response bytes.</p>
+        <div class="code-block">cd c_backend && make run    # 127.0.0.1:8080</div>
+      </div>
 
-        <div class="card">
-          <div class="card-title">🛠️ VS Code 现代化工程套件</div>
-          <p class="card-desc">配置了 Continue 智能助手（集成 DeepSeek-V3 与 R1）、Ruff 极速格式化、REST Client 及 Live Server 预览。</p>
-          <div class="code-box">已全部自动化配置就绪</div>
-          <span style="font-size: 0.85rem; color: #a78bfa;">● 随时在编辑器内一键调试</span>
+      <div class="project">
+        <div class="project-header">
+          <span class="project-name">python_backend/app.py</span>
+          <span class="project-tag">stdlib · cors · ai bridge</span>
         </div>
+        <p class="project-desc">zero-dependency http server.
+routes /health, /info, /api/chat. dual-model dispatch (deepseek / gemini).</p>
+        <div class="code-block">python3 python_backend/app.py    # 127.0.0.1:8000</div>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <span class="project-name">key hygiene</span>
+          <span class="project-tag">security</span>
+        </div>
+        <p class="project-desc">.env gitignored. secrets read from os.environ at runtime.
+repo holds .env.example template only. nothing leaks.</p>
       </div>
     </section>
 
-    <section id="ai-demo" class="interactive-section">
-      <h2 style="font-size: 1.5rem; font-weight: 700;">🤖 网页直连本地 AI 后端服务</h2>
-      <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.3rem;">
-        在后台运行 <code>python3 python_backend/app.py</code> 后，即可在此切换大模型并发送请求：
-      </p>
-
-      <div class="chat-input-group">
-        <select id="model-select">
-          <option value="deepseek">DeepSeek-V3</option>
-          <option value="gemini">Gemini 2.5 Flash</option>
-        </select>
-        <input type="text" id="prompt-input" placeholder="输入问题（如：如何学好 Linux 网络编程？）" value="向未来的自己说一句后端工程师的座右铭吧！">
-        <button id="send-btn" onclick="sendToBackend()">发送请求</button>
+    <section id="console">
+      <h2>console</h2>
+      <div class="console-box">
+        <p>connect to local python backend at 127.0.0.1:8000</p>
+        <div class="input-row">
+          <select id="model-select">
+            <option value="deepseek">deepseek</option>
+            <option value="gemini">gemini</option>
+          </select>
+          <input type="text" id="prompt-input" placeholder="type a message">
+          <button id="send-btn" onclick="sendToBackend()">send</button>
+        </div>
+        <div class="output" id="chat-output">waiting for input</div>
       </div>
-
-      <div class="chat-response" id="chat-output">等待发送请求...（点击上方按钮即可测试与本地 Python 后端的连通性）</div>
     </section>
+
   </div>
 
   <footer>
-    <p>构建者: <strong>Shenchuchu</strong> · 源码已同步托管于 GitHub</p>
-    <p style="margin-top: 0.5rem; font-size: 0.85rem;">Powered by Linux, Python, C & DeepSeek API</p>
+    shenchuchu · keys stay local · noise stays filtered
   </footer>
 
   <script>
     async function sendToBackend() {
       const input = document.getElementById('prompt-input');
-      const modelSelect = document.getElementById('model-select');
+      const model = document.getElementById('model-select').value;
       const output = document.getElementById('chat-output');
       const btn = document.getElementById('send-btn');
       const prompt = input.value.trim();
-      const model = modelSelect ? modelSelect.value : 'deepseek';
 
       if (!prompt) return;
 
       btn.disabled = true;
-      btn.innerText = "请求中...";
-      output.innerText = `⏳ 正在通过本地 Python 后端向 ${model.toUpperCase()} 转发请求，请稍候...`;
+      btn.innerText = '...';
+      output.innerText = `requesting ${model} via local backend`;
 
       try {
         const resp = await fetch('http://127.0.0.1:8000/api/chat', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prompt: prompt, model: model })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, model })
         });
 
-        if (!resp.ok) {
-          throw new Error('后端返回异常状态: ' + resp.status);
-        }
+        if (!resp.ok) throw new Error('status ' + resp.status);
 
         const data = await resp.json();
         output.innerText = data.reply || JSON.stringify(data, null, 2);
       } catch (err) {
-        output.innerHTML = `⚠️ <strong>连接失败或 Python 后端未启动</strong><br><br>` +
-          `请确保在终端中运行了：<br><code>cd python_backend && python3 app.py</code><br><br>` +
-          `详细提示: ` + err.message;
+        output.innerText = `connection failed\n\nrun: python3 python_backend/app.py\n\n${err.message}`;
       } finally {
         btn.disabled = false;
-        btn.innerText = "发送请求";
+        btn.innerText = 'send';
       }
     }
   </script>
