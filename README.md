@@ -1,3 +1,9 @@
+<div align="center">
+  <img src="./assets/banner.svg" width="100%" alt="Monochrome Banner"/>
+</div>
+
+---
+
 # backend-learning
 
 from posix socket to local api — minimal, verifiable, no frameworks.
@@ -80,3 +86,9 @@ os.environ    →  runtime reads only, no hardcoded secrets
 ---
 
 <sub>keys stay local · commits stay clean</sub>
+
+---
+
+<div align="center">
+  <sub>雨声未停 · 保持冷清 · 独行其道</sub>
+</div>
