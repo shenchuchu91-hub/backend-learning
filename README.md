@@ -1,8 +1,4 @@
-<p align="center">
-  <img src="./assets/banner.jpg" width="100%" alt="" />
-</p>
-
-<p align="center"><sub>雨还在下</sub></p>
+<img alt="backend-learning · 雨还在下" src="./assets/header.svg" width="100%" />
 
 # C / Python 练习
 
@@ -70,3 +66,5 @@ POST  /api/chat     { "prompt": "...", "model": "deepseek" 或 "gemini" }
 - 请求体里的 `model` 决定走 DeepSeek 还是 Gemini
 
 <p align="center"><sub>雨还在下</sub></p>
+
+<img alt="雨还在下 · 屏幕常亮" src="./assets/footer.svg" width="100%" />
