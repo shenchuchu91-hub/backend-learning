@@ -1,14 +1,12 @@
-<div align="center">
-  <img src="./assets/banner.svg" width="100%" alt="Monochrome Banner"/>
-</div>
+<p align="center">
+  <img src="./assets/banner.jpg" width="100%" alt="" />
+</p>
 
----
+<p align="center"><sub>雨还在下</sub></p>
 
-# backend-learning
+# C / Python 练习
 
-from posix socket to local api — minimal, verifiable, no frameworks.
-
----
+一边是 POSIX 套接字手写的小 HTTP，一边是标准库起的本地接口。密钥只放本机 `.env`，不进仓库。
 
 ## structure
 
@@ -90,5 +88,5 @@ os.environ    →  runtime reads only, no hardcoded secrets
 ---
 
 <div align="center">
-  <sub>雨声未停 · 保持冷清 · 独行其道</sub>
+  <sub>雨还在下</sub>
 </div>
